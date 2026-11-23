@@ -136,7 +136,7 @@
 
 
 
-
+# ---------------------------------------------------------------------------------------------------------
 
 
 # list, append(), pop(), enumerate() va len()
@@ -188,7 +188,7 @@
 
 
 
-
+# -------------------------------------------------------------------------------------------------
 
 # talabalar = [
 #     ("Ali", 85),
@@ -314,7 +314,7 @@
 
 
 
-
+# ---------------------------------------------------------------------------------------------------
 
 
 # while True:
@@ -349,3 +349,114 @@
 #             break
 #         case _:
 #             print("Noto'g'ri tanlov, iltimos qayta urinib ko'ring.")
+
+from datetime import datetime
+  
+DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
+def now_text():
+       return datetime.now().strftime(DATE_FORMAT)
+
+
+def parse_time(value):
+        if isinstance(value, datetime):
+            return value
+        if not value:
+            return None
+        try:
+            return datetime.strptime(str(value), DATE_FORMAT)
+        except ValueError:
+            return None
+
+
+
+class Custumer:
+    def __init__(self, id, name, phone, service_type, arrival_type=None, status=None, start_type=None, end_type=None ):
+        self.id=id
+        self.name=name
+        self.phone=phone
+        self.service_type=service_type
+        self.arrival_type=arrival_type 
+        self.status=status
+        self.start_type=start_type
+        self.end_type=end_type
+        
+
+
+
+
+class Navbat:
+    def __init__(self):
+        self.customers=[]
+
+    # def generate_id(self):
+    #   return f"A{len(self.customers)+1:03d}"
+
+    def generate_id(self):
+        numbers = []
+        for customer in self.customers:
+            try:
+                numbers.append(customer.id) 
+
+            except(ValueError, IndentationError):
+               pass
+            return f"A{len(numbers)+1:03d}"
+
+    def add_customers(self):
+        name = input("Ism kiriting: ").strip()
+        phone = input("telefon raqamingizni kiriting: ").strip()
+        service = input("Xizmat turini kiriting: ").strip()
+
+        
+        yangi=(self.generate_id(), name,phone,service)
+        self.customers.append(yangi)
+        print(f"{yangi[0]}. {name}-{phone}-{service} muvaffaqqiyatli qo'shildi")
+
+     
+   
+
+
+   
+
+    def call_next(self):
+        serving = next(c for c in self.customers if c.status == "serving")
+        if serving:
+            print(f"Avval {serving.id} li mijoz bilan suhbatni tugating")
+            return
+        
+        waiting = sorted(c for c in self.customers if c.status == "waiting"),
+        key=lambda c:(parse_time(c.arrival_time))
+
+        if not waiting:
+            print("Navbatdagi mijoz yoq")
+
+        custumer = waiting[0]
+        custumer.status = "servising"
+        custumer.status_time = now_text()
+        print(f"Keyingi mijoz: {custumer.id}")  | {custumer.name} | {custumer.service_type}
+        
+navbat=Navbat()       
+
+        
+
+while True:
+    print("\n===== SMART QUEUE MANAGEMENT SYSTEM =====")
+    print("1. Yangi mijoz qo'shish")
+    print("2. Keyingi mijozni chaqirish")
+    print("3. Navbatdagi mijozlarni ko'rish")
+    print("4. Mijozni navbatdan bekor qilish")
+    print("5. Mijozni qidirish")
+    print("6. Xizmat ko'rsatish tarixini ko'rish")
+    print("7. Statistikani ko'rish")
+    print("8. Excel faylga eksport qilish")
+    print("0. Chiqish")
+
+    tanlov = int(input("Tanlovingiz: "))
+
+    if tanlov==1:
+       navbat.add_customers()
+
+    elif tanlov == 2:
+        navbat.call_next()
+    else:
+        print("xato")
+      
